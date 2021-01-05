@@ -10,11 +10,10 @@ const ChartBarSimple = props => {
     pointHoverBackgroundColor,
     dataPoints,
     label,
-    pointed,
     ...attributes
   } = props
 
-  const defaultDatasets = (()=>{
+  const defaultDatasets = (() => {
     return [
       {
         data: dataPoints,
@@ -27,7 +26,7 @@ const ChartBarSimple = props => {
     ]
   })()
 
-  const defaultOptions = (()=>{
+  const defaultOptions = (() => {
     return {
       maintainAspectRatio: false,
       legend: {
