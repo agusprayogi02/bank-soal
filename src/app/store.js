@@ -1,10 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
-import showBarReducer from '../features/showbar/showbarSlice';
+import {configureStore} from '@reduxjs/toolkit'
+import counterReducer from '../features/counter/counterSlice'
+import showBarReducer from '../features/showbar/showbarSlice'
+import userdataReducer from '../features/userdata/userdataSlice'
 
 export default configureStore({
   reducer: {
     counter: counterReducer,
-    sidebar: showBarReducer
+    sidebar: showBarReducer,
+    userdata: userdataReducer,
   },
-});
+})

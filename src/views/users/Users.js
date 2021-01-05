@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import {useHistory, useLocation} from 'react-router-dom'
+import {useDispatch} from 'react-redux'
 import {
   CBadge,
   CCard,
@@ -8,74 +9,87 @@ import {
   CCol,
   CDataTable,
   CRow,
-  CPagination
+  CPagination,
 } from '@coreui/react'
+import {useSelector} from 'react-redux'
 
-import usersData from './UsersData'
+import {fetchUsers} from '../../features/userdata/userdataSlice'
+// import usersData from './UsersData'
 
-const getBadge = status => {
+const getBadge = (status) => {
   switch (status) {
-    case 'Active': return 'success'
-    case 'Inactive': return 'secondary'
-    case 'Pending': return 'warning'
-    case 'Banned': return 'danger'
-    default: return 'primary'
+    case 'Active':
+      return 'success'
+    case 'Inactive':
+      return 'secondary'
+    case 'Pending':
+      return 'warning'
+    case 'Banned':
+      return 'danger'
+    default:
+      return 'primary'
   }
 }
 
 const Users = () => {
   const history = useHistory()
+  const dispatch = useDispatch()
   const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1)
   const [page, setPage] = useState(currentPage)
+  const usersData = useSelector((state) => state.userdata.value)
+  const totalPage = Math.floor(usersData.length / 5)
 
-  const pageChange = newPage => {
+  const pageChange = (newPage) => {
     currentPage !== newPage && history.push(`/users?page=${newPage}`)
   }
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage)
+    dispatch(fetchUsers())
   }, [currentPage, page])
 
   return (
     <CRow>
       <CCol xl={6}>
         <CCard>
-          <CCardHeader>
-            Users
-            <small className="text-muted"> example</small>
-          </CCardHeader>
+          <CCardHeader>Users</CCardHeader>
           <CCardBody>
-          <CDataTable
-            items={usersData}
-            fields={[
-              { key: 'name', _classes: 'font-weight-bold' },
-              'registered', 'role', 'status'
-            ]}
-            hover
-            striped
-            itemsPerPage={5}
-            activePage={page}
-            clickableRows
-            onRowClick={(item) => history.push(`/users/${item.id}`)}
-            scopedSlots = {{
-              'status':
-                (item)=>(
-                  <td>
-                    <CBadge color={getBadge(item.status)}>
-                      {item.status}
-                    </CBadge>
-                  </td>
-                )
-            }}
-          />
-          <CPagination
-            activePage={page}
-            onActivePageChange={pageChange}
-            pages={5}
-            doubleArrows={false} 
-            align="center"
-          />
+            <CDataTable
+              items={usersData}
+              fields={[
+                {key: 'name', _classes: 'font-weight-bold'},
+                'email',
+                'role',
+                'kelas',
+                'jurusan',
+                'sekolah',
+              ]}
+              hover
+              striped
+              itemsPerPage={5}
+              activePage={page}
+              clickableRows
+              onRowClick={(item) => history.push(`/users/${item.id}`)}
+              scopedSlots={{
+                status:
+                  // eslint-disable-next-line react/display-name
+                  (item) => (
+                    <td>
+                      <CBadge color={getBadge(item.status)}>{item.status}</CBadge>
+                    </td>
+                  ),
+              }}
+            />
+            {totalPage > 0 && (
+              <CPagination
+                activePage={page}
+                onActivePageChange={pageChange}
+                pages={totalPage}
+                doubleArrows={false}
+                align="center"
+              />
+            )}
           </CCardBody>
         </CCard>
       </CCol>

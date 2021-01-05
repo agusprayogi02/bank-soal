@@ -27,8 +27,7 @@
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "redux": "4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux": "^4.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,9 +49,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "eslint": "^7.17.0",
-    "eslint-plugin-react": "^7.22.0"
   }
 }
