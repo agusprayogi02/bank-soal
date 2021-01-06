@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {getApiUser, getApiUsers} from '../../api/Api'
+import {getApiUser, getApiUsers, login} from '../../api/Api'
 
 export const UserdataSlice = createSlice({
   name: 'userdata',
@@ -42,6 +42,7 @@ export const UserdataSlice = createSlice({
     },
     getUserdataSuccess: (state, action) => {
       state.user = action.payload
+      state.isLoading = false
     },
   },
 })
@@ -68,6 +69,16 @@ export const fetchUserdata = (id) => async (dispatch) => {
   try {
     dispatch(getUsersStart())
     const user = await getApiUser(id)
+    dispatch(getUserdataSuccess(user))
+  } catch (err) {
+    dispatch(getUserFailure(err))
+  }
+}
+
+export const fetchLogin = (email, password) => async (dispatch) => {
+  try {
+    dispatch(getUsersStart())
+    const user = await login(email, password)
     dispatch(getUserdataSuccess(user))
   } catch (err) {
     dispatch(getUserFailure(err))
