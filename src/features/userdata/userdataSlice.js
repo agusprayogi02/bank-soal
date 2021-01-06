@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {getApiUser, getApiUsers, login} from '../../api/Api'
+import {getApiUser, getSekolah, login} from '../../api/Api'
 
 export const UserdataSlice = createSlice({
   name: 'userdata',
@@ -15,24 +15,20 @@ export const UserdataSlice = createSlice({
       state.error = null
     },
     getUserSuccess: (state, action) => {
-      var arr = action.payload
+      var arr = action.payload.users
+      // console.log('isi', arr)
       var users = []
-      arr.forEach((v) => {
-        if (v.role === 'siswa') {
+      arr.forEach((val) => {
+        if (val.role === 'siswa') {
           var i = {
-            id: v.uid,
-            name: v.firstName + ' ' + v.lastName,
-            email: v.email,
-            age: v.age,
-            kelas: v.kelas,
-            role: v.role,
-            sekolah: v.sekolah.nama,
-            jurusan: v.sekolah.jurusan,
+            id: val.uid,
+            name: val.firstName + ' ' + val.lastName,
+            email: val.email,
+            role: val.role,
           }
           users.push(i)
         }
       })
-      // console.log(users, arr)
       state.value = users
       state.isLoading = false
     },
@@ -60,10 +56,10 @@ export const {
 
 export default UserdataSlice.reducer
 
-export const fetchUsers = () => async (dispatch) => {
+export const fetchUsers = (id) => async (dispatch) => {
   try {
     dispatch(getUsersStart())
-    const users = await getApiUsers()
+    const users = await getSekolah(id)
     dispatch(getUserSuccess(users))
   } catch (err) {
     dispatch(getUserFailure(err))

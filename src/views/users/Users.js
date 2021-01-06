@@ -37,8 +37,8 @@ const Users = () => {
   const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
   const currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1)
   const [page, setPage] = useState(currentPage)
-  const usersData = useSelector((state) => state.userdata.value)
-  const totalPage = Math.floor(usersData.length / 5)
+  const {value, user} = useSelector((state) => state.userdata)
+  const totalPage = Math.floor(value.length / 5)
 
   const pageChange = (newPage) => {
     currentPage !== newPage && history.push(`/users?page=${newPage}`)
@@ -46,24 +46,19 @@ const Users = () => {
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage)
-    dispatch(fetchUsers())
+    console.log(user.sekolah.id)
+    dispatch(fetchUsers(user.sekolah.id))
   }, [currentPage, page])
 
   return (
     <CRow>
-      <CCol xl={9}>
+      <CCol xl={6}>
         <CCard>
           <CCardHeader>Users</CCardHeader>
           <CCardBody>
             <CDataTable
-              items={usersData}
-              fields={[
-                {key: 'name', _classes: 'font-weight-bold'},
-                'email',
-                'kelas',
-                'jurusan',
-                'sekolah',
-              ]}
+              items={value}
+              fields={[{key: 'name', _classes: 'font-weight-bold'}, 'email', 'role']}
               hover
               striped
               itemsPerPage={5}

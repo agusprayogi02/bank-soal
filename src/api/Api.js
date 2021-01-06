@@ -23,7 +23,7 @@ export async function getApiUser(id = '') {
 
 export async function getSekolah(id = '') {
   if (id !== '') {
-    const {data} = await axios.get(BASE_URL + '/users/' + id)
+    const {data} = await axios.get(BASE_URL + '/sekolah/' + id)
     if (data.error !== null && data.error !== undefined) {
       throw data
     }
