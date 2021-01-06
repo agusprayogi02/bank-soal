@@ -4,13 +4,28 @@ import qs from 'qs'
 
 export async function getApiUsers() {
   const {data} = await axios.get(BASE_URL + '/users')
+  if (data.error !== null && data.error !== undefined) {
+    throw data
+  }
   return data
 }
 export async function getApiUser(id = '') {
   if (id !== '') {
-    const {data, status} = await axios.get(BASE_URL + '/users/' + id)
-    if (status !== 200) {
-      throw new Error(data)
+    const {data} = await axios.get(BASE_URL + '/users/' + id)
+    if (data.error !== null && data.error !== undefined) {
+      throw data
+    }
+    return data
+  } else {
+    throw new Error('required Id')
+  }
+}
+
+export async function getSekolah(id = '') {
+  if (id !== '') {
+    const {data} = await axios.get(BASE_URL + '/users/' + id)
+    if (data.error !== null && data.error !== undefined) {
+      throw data
     }
     return data
   } else {
@@ -24,11 +39,11 @@ export async function login(email = '', password = '') {
       email: email,
       password: password,
     }
-    const {status, data} = await axios.post(BASE_URL + '/users/login', qs.stringify(val), {
+    const {data} = await axios.post(BASE_URL + '/users/login', qs.stringify(val), {
       headers: {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'},
     })
-    if (status !== 200) {
-      throw new Error(data)
+    if (data.error !== null && data.error !== undefined) {
+      throw data
     }
     return data
   }

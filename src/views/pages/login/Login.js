@@ -128,7 +128,7 @@ const Login = () => {
               style={{backgroundColor: 'red', color: 'white', fontWeight: 'bold'}}>
               {error.name}
             </CToastHeader>
-            <CToastBody color="blue">{error.message}</CToastBody>
+            <CToastBody color="blue">{error.message ?? error.error}</CToastBody>
           </CToast>
         </CToaster>
       )}
