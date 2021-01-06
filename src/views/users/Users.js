@@ -51,7 +51,7 @@ const Users = () => {
 
   return (
     <CRow>
-      <CCol xl={6}>
+      <CCol xl={9}>
         <CCard>
           <CCardHeader>Users</CCardHeader>
           <CCardBody>
@@ -60,7 +60,6 @@ const Users = () => {
               fields={[
                 {key: 'name', _classes: 'font-weight-bold'},
                 'email',
-                'role',
                 'kelas',
                 'jurusan',
                 'sekolah',

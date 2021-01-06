@@ -44,6 +44,9 @@ export const UserdataSlice = createSlice({
       state.user = action.payload
       state.isLoading = false
     },
+    getLogout: (state) => {
+      state.user = {}
+    },
   },
 })
 
@@ -52,6 +55,7 @@ export const {
   getUserSuccess,
   getUserFailure,
   getUserdataSuccess,
+  getLogout,
 } = UserdataSlice.actions
 
 export default UserdataSlice.reducer
