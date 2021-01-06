@@ -1,11 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {getApiUsers} from '../../api/Api'
+import {getApiUser, getApiUsers} from '../../api/Api'
 
 export const UserdataSlice = createSlice({
   name: 'userdata',
   initialState: {
     isLoading: false,
     value: [],
+    user: {},
     error: null,
   },
   reducers: {
@@ -17,17 +18,19 @@ export const UserdataSlice = createSlice({
       var arr = action.payload
       var users = []
       arr.forEach((v) => {
-        var i = {
-          id: v.uid,
-          name: v.firstName + ' ' + v.lastName,
-          email: v.email,
-          age: v.age,
-          kelas: v.kelas,
-          role: v.role,
-          sekolah: v.sekolah.nama,
-          jurusan: v.sekolah.jurusan,
+        if (v.role === 'siswa') {
+          var i = {
+            id: v.uid,
+            name: v.firstName + ' ' + v.lastName,
+            email: v.email,
+            age: v.age,
+            kelas: v.kelas,
+            role: v.role,
+            sekolah: v.sekolah.nama,
+            jurusan: v.sekolah.jurusan,
+          }
+          users.push(i)
         }
-        users.push(i)
       })
       // console.log(users, arr)
       state.value = users
@@ -37,10 +40,18 @@ export const UserdataSlice = createSlice({
       state.error = action.payload
       state.isLoading = false
     },
+    getUserdataSuccess: (state, action) => {
+      state.user = action.payload
+    },
   },
 })
 
-export const {getUsersStart, getUserSuccess, getUserFailure} = UserdataSlice.actions
+export const {
+  getUsersStart,
+  getUserSuccess,
+  getUserFailure,
+  getUserdataSuccess,
+} = UserdataSlice.actions
 
 export default UserdataSlice.reducer
 
@@ -49,6 +60,15 @@ export const fetchUsers = () => async (dispatch) => {
     dispatch(getUsersStart())
     const users = await getApiUsers()
     dispatch(getUserSuccess(users))
+  } catch (err) {
+    dispatch(getUserFailure(err))
+  }
+}
+export const fetchUserdata = (id) => async (dispatch) => {
+  try {
+    dispatch(getUsersStart())
+    const user = await getApiUser(id)
+    dispatch(getUserdataSuccess(user))
   } catch (err) {
     dispatch(getUserFailure(err))
   }
