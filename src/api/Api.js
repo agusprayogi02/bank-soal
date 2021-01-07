@@ -9,6 +9,14 @@ export async function getApiUsers() {
   }
   return data
 }
+
+export async function getSekolahAll() {
+  const {data} = await axios.get(BASE_URL + '/sekolah/get')
+  if (data.error !== null && data.error !== undefined) {
+    throw data
+  }
+  return data
+}
 export async function getApiUser(id = '') {
   if (id !== '') {
     const {data} = await axios.get(BASE_URL + '/users/' + id)

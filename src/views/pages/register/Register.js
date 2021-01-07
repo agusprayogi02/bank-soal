@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   CButton,
   CCard,
@@ -12,10 +12,18 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
+  CSelect,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import {getSekolahAll} from '../../../api/Api'
 
 const Register = () => {
+  const [sekolah, setSekolah] = useState([])
+  useEffect(() => {
+    getSekolahAll().then((res) => {
+      setSekolah(res)
+    })
+  }, [])
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -62,7 +70,7 @@ const Register = () => {
                     </CInputGroupPrepend>
                     <CInput type="password" placeholder="Password" autoComplete="new-password" />
                   </CInputGroup>
-                  <CInputGroup className="mb-4">
+                  <CInputGroup className="mb-3">
                     <CInputGroupPrepend>
                       <CInputGroupText>
                         <CIcon name="cil-lock-locked" />
@@ -73,6 +81,34 @@ const Register = () => {
                       placeholder="Repeat password"
                       autoComplete="new-password"
                     />
+                  </CInputGroup>
+                  <CInputGroup className="mb-3">
+                    <CInputGroupPrepend>
+                      <CInputGroupText>
+                        <CIcon name="cil-history" />
+                      </CInputGroupText>
+                    </CInputGroupPrepend>
+                    <CInput type="number" placeholder="Age" autoComplete="age" />
+                  </CInputGroup>
+                  <CInputGroup className="mb-4">
+                    <CInputGroupPrepend>
+                      <CInputGroupText>
+                        <CIcon name="cil-school" />
+                      </CInputGroupText>
+                    </CInputGroupPrepend>
+                    <CSelect
+                      custom
+                      name="disabledSelect"
+                      id="disabledSelect"
+                      placeholder="Pilih"
+                      autoComplete="name">
+                      <option value="0">Please select</option>
+                      {sekolah.map((v, i) => (
+                        <option key={'key' + i} value={v.id}>
+                          {v.nama} - {v.kelas} {v.jurusan}
+                        </option>
+                      ))}
+                    </CSelect>
                   </CInputGroup>
                   <CButton color="success" block>
                     Create Account
