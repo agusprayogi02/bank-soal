@@ -46,7 +46,6 @@ const Users = () => {
 
   useEffect(() => {
     currentPage !== page && setPage(currentPage)
-    console.log(user.sekolah.id)
     dispatch(fetchUsers(user.sekolah.id))
   }, [currentPage, page])
 
@@ -58,7 +57,7 @@ const Users = () => {
           <CCardBody>
             <CDataTable
               items={value}
-              fields={[{key: 'name', _classes: 'font-weight-bold'}, 'email', 'role']}
+              fields={[{key: 'name', _classes: 'font-weight-bold'}, 'email', 'role', 'jk']}
               hover
               striped
               itemsPerPage={5}

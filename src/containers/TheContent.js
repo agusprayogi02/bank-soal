@@ -1,9 +1,12 @@
-import React, {Suspense} from 'react'
-import {Redirect, Route, Switch} from 'react-router-dom'
+import React, {Suspense, useEffect} from 'react'
+import {Redirect, Route, Switch, useHistory} from 'react-router-dom'
 import {CContainer, CFade} from '@coreui/react'
 
 // routes config
 import routes from '../routes'
+import {useDispatch, useSelector} from 'react-redux'
+import useToken from '../app/useToken'
+import {fetchUserdata} from '../features/userdata/userdataSlice'
 const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
@@ -11,6 +14,23 @@ const loading = (
 )
 
 const TheContent = () => {
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const {error} = useSelector((state) => state.userdata)
+  const {token} = useToken()
+  const getUser = () => {
+    if (token !== '') {
+      dispatch(fetchUserdata(token))
+      if (error !== null) {
+        history.replace('/login')
+      }
+    } else {
+      history.replace('/login')
+    }
+  }
+  useEffect(() => {
+    getUser()
+  }, [])
   return (
     <main className="c-main">
       <CContainer fluid>

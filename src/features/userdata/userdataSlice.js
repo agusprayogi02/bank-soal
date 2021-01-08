@@ -25,12 +25,14 @@ export const UserdataSlice = createSlice({
             name: val.firstName + ' ' + val.lastName,
             email: val.email,
             role: val.role,
+            jk: val.jk,
           }
           users.push(i)
         }
       })
       state.value = users
       state.isLoading = false
+      state.error = null
     },
     getUserFailure: (state, action) => {
       state.error = action.payload
