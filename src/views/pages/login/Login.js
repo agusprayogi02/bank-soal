@@ -20,7 +20,7 @@ import {
 } from '@coreui/react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
-import {fetchLogin} from '../../../features/userdata/userdataSlice'
+import {fetchLogin, resetError} from '../../../features/userdata/userdataSlice'
 import CIcon from '@coreui/icons-react'
 import useToken from '../../../app/useToken'
 
@@ -39,11 +39,15 @@ const Login = () => {
     if (user.uid !== undefined) {
       setToken(String(user.uid))
       history.push('/')
+    } else {
+      setTimeout(() => {
+        dispatch(resetError())
+      }, 3000)
     }
   }
   useEffect(() => {
     syncron()
-  }, [user])
+  }, [user, error])
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>

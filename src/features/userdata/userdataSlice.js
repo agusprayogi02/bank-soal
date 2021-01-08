@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {getApiUser, getSekolah, login} from '../../api/Api'
+import {getApiUser, getSekolah, login, postRegister} from '../../api/Api'
 
 export const UserdataSlice = createSlice({
   name: 'userdata',
@@ -39,9 +39,14 @@ export const UserdataSlice = createSlice({
     getUserdataSuccess: (state, action) => {
       state.user = action.payload
       state.isLoading = false
+      state.error = null
     },
     getLogout: (state) => {
       state.user = {}
+      state.error = null
+    },
+    resetError: (state) => {
+      state.error = null
     },
   },
 })
@@ -52,6 +57,7 @@ export const {
   getUserFailure,
   getUserdataSuccess,
   getLogout,
+  resetError,
 } = UserdataSlice.actions
 
 export default UserdataSlice.reducer
@@ -79,6 +85,15 @@ export const fetchLogin = (email, password) => async (dispatch) => {
   try {
     dispatch(getUsersStart())
     const user = await login(email, password)
+    dispatch(getUserdataSuccess(user))
+  } catch (err) {
+    dispatch(getUserFailure(err))
+  }
+}
+export const fetchRegister = (res = null, id = '') => async (dispatch) => {
+  try {
+    dispatch(getUsersStart())
+    const user = await postRegister(res, id)
     dispatch(getUserdataSuccess(user))
   } catch (err) {
     dispatch(getUserFailure(err))
