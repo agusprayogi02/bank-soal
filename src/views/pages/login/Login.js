@@ -17,23 +17,26 @@ import {
   CToast,
   CToastBody,
   CToastHeader,
+  CInputGroupAppend,
 } from '@coreui/react'
 import {useDispatch, useSelector} from 'react-redux'
 import {useHistory} from 'react-router-dom'
 import {fetchLogin, resetError} from '../../../features/userdata/userdataSlice'
 import CIcon from '@coreui/icons-react'
 import useToken from '../../../app/useToken'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
 
 const Login = () => {
   const dispatch = useDispatch()
   const {setToken} = useToken()
   const history = useHistory()
   const {error, user} = useSelector((state) => state.userdata)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [visible, setVisible] = useState(false)
   const onLogin = (e) => {
     e.preventDefault()
-    dispatch(fetchLogin(email, password))
+    var target = e.target
+    dispatch(fetchLogin(target[0].value, target[1].value))
   }
   const syncron = () => {
     if (user.uid !== undefined) {
@@ -65,14 +68,7 @@ const Login = () => {
                           <CIcon name="cil-envelope-closed" />
                         </CInputGroupText>
                       </CInputGroupPrepend>
-                      <CInput
-                        type="email"
-                        value={email}
-                        placeholder="Email"
-                        autoComplete="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
+                      <CInput type="email" placeholder="Email" autoComplete="email" required />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupPrepend>
@@ -81,13 +77,16 @@ const Login = () => {
                         </CInputGroupText>
                       </CInputGroupPrepend>
                       <CInput
-                        type="password"
-                        value={password}
+                        type={visible ? 'text' : 'password'}
                         placeholder="Password"
                         autoComplete="current-password"
-                        onChange={(e) => setPassword(e.target.value)}
                         required
                       />
+                      <CInputGroupAppend>
+                        <CInputGroupText onClick={() => setVisible(!visible)}>
+                          <FontAwesomeIcon icon={visible ? faEyeSlash : faEye} />
+                        </CInputGroupText>
+                      </CInputGroupAppend>
                     </CInputGroup>
                     <CRow>
                       <CCol xs="6">

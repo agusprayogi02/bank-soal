@@ -35,31 +35,38 @@ const Register = () => {
   const {setToken} = useToken()
   const [visible, setVisible] = useState(false)
   const [sekolah, setSekolah] = useState([])
-  const [fist, setFist] = useState('')
-  const [last, setLast] = useState('')
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
-  const [conpass, setConpass] = useState('')
-  const [age, setAge] = useState('')
-  const [kelas, setKelas] = useState('')
   const onsubmit = (e) => {
     e.preventDefault()
-    if (pass !== conpass) {
-      var err = {
+    var err,
+      target = e.target
+    if (target[3].value !== target[4].value) {
+      err = {
         name: 'Error',
         message: 'Password Tidak Sama!!',
       }
       dispatch(getUserFailure(err))
+    } else if (target[5].value === '0') {
+      err = {
+        name: 'Error',
+        message: 'Jenis Kelamin Harus diisi!!',
+      }
+      dispatch(getUserFailure(err))
+    } else if (target[6].value === '0') {
+      err = {
+        name: 'Error',
+        message: 'Kelas Harus diisi!!',
+      }
+      dispatch(getUserFailure(err))
     } else {
       var user = {
-        firstName: fist,
-        lastName: last,
-        email: email,
-        password: pass,
-        age: age,
+        firstName: target[0].value,
+        lastName: target[1].value,
+        email: target[2].value,
+        password: target[3].value,
+        jk: target[5].value,
         role: 'guru',
       }
-      dispatch(fetchRegister(user, kelas))
+      dispatch(fetchRegister(user, target[6].value))
     }
   }
   const syncron = () => {
@@ -102,8 +109,6 @@ const Register = () => {
                         </CInputGroupPrepend>
                         <CInput
                           type="text"
-                          value={fist}
-                          onChange={(v) => setFist(v.target.value)}
                           placeholder="FistName"
                           autoComplete="FistName"
                           required
@@ -119,8 +124,6 @@ const Register = () => {
                         </CInputGroupPrepend>
                         <CInput
                           type="text"
-                          value={last}
-                          onChange={(v) => setLast(v.target.value)}
                           placeholder="LastName"
                           autoComplete="LastName"
                           required
@@ -132,14 +135,7 @@ const Register = () => {
                     <CInputGroupPrepend>
                       <CInputGroupText>@</CInputGroupText>
                     </CInputGroupPrepend>
-                    <CInput
-                      type="email"
-                      value={email}
-                      onChange={(v) => setEmail(v.target.value)}
-                      placeholder="Email"
-                      autoComplete="email"
-                      required
-                    />
+                    <CInput type="email" placeholder="Email" autoComplete="email" required />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupPrepend>
@@ -151,8 +147,6 @@ const Register = () => {
                       type={visible ? 'text' : 'password'}
                       placeholder="Password"
                       autoComplete="new-password"
-                      value={pass}
-                      onChange={(v) => setPass(v.target.value)}
                       required
                     />
                     <CInputGroupAppend>
@@ -171,8 +165,6 @@ const Register = () => {
                       type={visible ? 'text' : 'password'}
                       placeholder="Repeat password"
                       autoComplete="new-password"
-                      value={conpass}
-                      onChange={(v) => setConpass(v.target.value)}
                       required
                     />
                   </CInputGroup>
@@ -182,14 +174,17 @@ const Register = () => {
                         <CIcon name="cil-history" />
                       </CInputGroupText>
                     </CInputGroupPrepend>
-                    <CInput
-                      type="number"
-                      value={age}
-                      onChange={(e) => setAge(e.target.value)}
-                      placeholder="Age"
-                      autoComplete="age"
-                      required
-                    />
+                    <CSelect
+                      custom
+                      name="jk"
+                      id="jk"
+                      placeholder="Pilih"
+                      autoComplete="name"
+                      required>
+                      <option value="0">Please select Jenis Kelamin</option>
+                      <option value="L">Laki-Laki</option>
+                      <option value="P">Perempuan</option>
+                    </CSelect>
                   </CInputGroup>
                   <CInputGroup className="mb-4">
                     <CInputGroupPrepend>
@@ -199,14 +194,12 @@ const Register = () => {
                     </CInputGroupPrepend>
                     <CSelect
                       custom
-                      name="disabledSelect"
-                      id="disabledSelect"
-                      placeholder="Pilih"
+                      name="kelas"
+                      id="kelas"
+                      placeholder="Pilih Kelas"
                       autoComplete="name"
-                      value={kelas}
-                      required
-                      onChange={(e) => setKelas(e.target.value)}>
-                      <option value="0">Please select</option>
+                      required>
+                      <option value="0">Please select Kelas</option>
                       {sekolah.map((v, i) => (
                         <option key={'key' + i} value={v.id}>
                           {v.nama} - {v.kelas} {v.jurusan}
