@@ -24,6 +24,20 @@ export async function postRegister(res = null, id = '') {
   }
 }
 
+export async function postSekolah(res = null) {
+  if (res !== null) {
+    const {data} = await axios.post(BASE_URL + '/sekolah/save', qs.stringify(res), {
+      headers: {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'},
+    })
+    if (data.error !== null && data.error !== undefined) {
+      throw data
+    }
+    return data
+  } else {
+    throw new Error('required Id')
+  }
+}
+
 export async function getSekolahAll() {
   const {data} = await axios.get(BASE_URL + '/sekolah/get')
   if (data.error !== null && data.error !== undefined) {

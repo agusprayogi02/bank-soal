@@ -12,6 +12,11 @@ import {
   CInputGroupAppend,
   CInputGroupPrepend,
   CInputGroupText,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
   CRow,
   CSelect,
   CToast,
@@ -20,9 +25,9 @@ import {
   CToastHeader,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {getSekolahAll} from '../../../api/Api'
+import {getSekolahAll, postSekolah} from '../../../api/Api'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
+import {faBookOpen, faEye, faEyeSlash, faSchool} from '@fortawesome/free-solid-svg-icons'
 import {useHistory} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import {fetchRegister, getUserFailure, resetError} from '../../../features/userdata/userdataSlice'
@@ -35,6 +40,8 @@ const Register = () => {
   const {setToken} = useToken()
   const [visible, setVisible] = useState(false)
   const [sekolah, setSekolah] = useState([])
+  const [modal, setModal] = useState(false)
+  const [kelas, setKelas] = useState('0')
   const onsubmit = (e) => {
     e.preventDefault()
     var err,
@@ -78,6 +85,21 @@ const Register = () => {
         dispatch(resetError())
       }, 3000)
     }
+  }
+  const onSave = (e) => {
+    e.preventDefault()
+    var target = e.target
+    var save = {
+      nama: target[0].value,
+      kelas: Number(target[1].value),
+      jurusan: target[2].value,
+    }
+    postSekolah(save).then((val) => {
+      setModal(!modal)
+      sekolah.push(val)
+      setSekolah(sekolah)
+      setKelas(val.id)
+    })
   }
 
   useEffect(() => {
@@ -198,6 +220,8 @@ const Register = () => {
                       id="kelas"
                       placeholder="Pilih Kelas"
                       autoComplete="name"
+                      value={kelas}
+                      onChange={(e) => setKelas(e.target.value)}
                       required>
                       <option value="0">Please select Kelas</option>
                       {sekolah.map((v, i) => (
@@ -216,15 +240,20 @@ const Register = () => {
                 <CRow>
                   <CCol xs="12" sm="6">
                     <CButton
-                      className="btn-facebook mb-1"
+                      className="mb-1"
+                      color="secondary"
                       block
                       onClick={() => history.replace('/login')}>
                       <span>Back</span>
                     </CButton>
                   </CCol>
                   <CCol xs="12" sm="6">
-                    <CButton className="btn-twitter mb-1" block>
-                      <span>twitter</span>
+                    <CButton
+                      className="mb-1"
+                      color="primary"
+                      onClick={() => setModal(!modal)}
+                      block>
+                      <span>Buat Kelas Baru</span>
                     </CButton>
                   </CCol>
                 </CRow>
@@ -245,6 +274,47 @@ const Register = () => {
           </CToast>
         </CToaster>
       )}
+      <CModal show={modal} onClose={() => setModal(!modal)}>
+        <CModalHeader closeButton>
+          <CModalTitle>Modal title</CModalTitle>
+        </CModalHeader>
+        <CForm onSubmit={onSave}>
+          <CModalBody>
+            <CInputGroup className="mb-3">
+              <CInputGroupPrepend>
+                <CInputGroupText>
+                  <CIcon name="cil-school" />
+                </CInputGroupText>
+              </CInputGroupPrepend>
+              <CInput type="text" placeholder="Nama Sekolah" autoComplete="sekolah" required />
+            </CInputGroup>
+            <CInputGroup className="mb-3">
+              <CInputGroupPrepend>
+                <CInputGroupText>
+                  <FontAwesomeIcon icon={faSchool} />
+                </CInputGroupText>
+              </CInputGroupPrepend>
+              <CInput type="number" placeholder="Kelas" autoComplete="kelas" required />
+            </CInputGroup>
+            <CInputGroup className="mb-3">
+              <CInputGroupPrepend>
+                <CInputGroupText>
+                  <FontAwesomeIcon icon={faBookOpen} />
+                </CInputGroupText>
+              </CInputGroupPrepend>
+              <CInput type="text" placeholder="Jurusan" autoComplete="jurusan" required />
+            </CInputGroup>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="success" type="submit">
+              Buat Kelas
+            </CButton>
+            <CButton color="secondary" onClick={() => setModal(!modal)}>
+              Cancel
+            </CButton>
+          </CModalFooter>
+        </CForm>
+      </CModal>
     </div>
   )
 }
