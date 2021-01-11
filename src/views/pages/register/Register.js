@@ -71,7 +71,7 @@ const Register = () => {
         email: target[2].value,
         password: target[3].value,
         jk: target[5].value,
-        role: 'guru',
+        role: 'siswa',
       }
       dispatch(fetchRegister(user, target[6].value))
     }
@@ -276,7 +276,7 @@ const Register = () => {
       )}
       <CModal show={modal} onClose={() => setModal(!modal)}>
         <CModalHeader closeButton>
-          <CModalTitle>Modal title</CModalTitle>
+          <CModalTitle>Form Membuat Kelas Baru</CModalTitle>
         </CModalHeader>
         <CForm onSubmit={onSave}>
           <CModalBody>
