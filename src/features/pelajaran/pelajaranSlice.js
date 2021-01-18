@@ -1,4 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
+import {getUserFailure} from '../userdata/userdataSlice'
+import {getApiPelajaranByuid} from '../../api/pelajaranApi'
 
 export const pelajaranSlice = createSlice({
   name: 'pelajaran',
@@ -18,7 +20,7 @@ export const pelajaranSlice = createSlice({
     },
     getPelajaranSuccess: (state, action) => {
       state.isLoading = false
-      state.pelajaran = action.payload
+      state.pelajaran = action.payload.pelajarans
     },
   },
 })
@@ -26,3 +28,13 @@ export const pelajaranSlice = createSlice({
 export const {getPelajaranStart, getPelajaranFailure, getPelajaranSuccess} = pelajaranSlice.actions
 
 export default pelajaranSlice.reducer
+
+export const getPelajaranByid = (uid) => async (dispatch) => {
+  try {
+    dispatch(getPelajaranStart)
+    const pelajaran = await getApiPelajaranByuid(uid)
+    dispatch(getPelajaranSuccess(pelajaran))
+  } catch (error) {
+    dispatch(getUserFailure(error))
+  }
+}

@@ -1,33 +1,43 @@
 import React, {useEffect} from 'react'
-import {CCard, CCardBody, CCardHeader, CCol, CDataTable, CRow} from '@coreui/react'
+import {CCard, CCardBody, CCardFooter, CCardHeader, CCol, CRow} from '@coreui/react'
 import {useDispatch, useSelector} from 'react-redux'
+import {getPelajaranByid} from '../../../features/pelajaran/pelajaranSlice'
+import useToken from '../../../app/useToken'
+import CIcon from '@coreui/icons-react'
 
 const Pelajaran = () => {
   const dispatch = useDispatch()
+  const {token} = useToken()
   const {pelajaran} = useSelector((state) => state.pelajaran)
   useEffect(() => {
-    dispatch()
+    dispatch(getPelajaranByid(token))
   }, [])
   return (
-    <CRow>
-      <CCol xl={6}>
-        <CCard>
-          <CCardHeader>List Pelajaran</CCardHeader>
-          <CCardBody>
-            <CDataTable
-              items={pelajaran}
-              fields={[{key: 'name', _classes: 'font-weight-bold'}, 'email', 'role', 'jk']}
-              hover
-              striped
-              // itemsPerPage={5}
-              // activePage={page}
-              clickableRows
-              // onRowClick={(item) => history.push(`/users/${item.id}`)}
-            />
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+    <CCard>
+      <CCardHeader>Mata Pelajaran</CCardHeader>
+      <CCardBody>
+        <CRow>
+          {pelajaran.map((e, i) => {
+            console.log(e)
+            return (
+              <CCol sm="6" lg="3" key={i}>
+                <CCard>
+                  <CCardBody color="gradient-warning">
+                    <CIcon name="cil-calendar" height="52" className="my-4" />
+                  </CCardBody>
+                  <CCardFooter className="text-center">
+                    <h4>
+                      <b>{e.nama}</b>
+                    </h4>
+                    <p className="text-dark">{e.deskripsi}</p>
+                  </CCardFooter>
+                </CCard>
+              </CCol>
+            )
+          })}
+        </CRow>
+      </CCardBody>
+    </CCard>
   )
 }
 
