@@ -20,5 +20,14 @@ var json = [
       color: 'info',
     },
   },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'List Pelajaran',
+    to: '/pelajaran',
+    icon: <CIcon name="cil-school" customClasses="c-sidebar-nav-icon" />,
+    badge: {
+      color: 'info',
+    },
+  },
 ]
 export default json

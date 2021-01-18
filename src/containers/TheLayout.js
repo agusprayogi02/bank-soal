@@ -20,7 +20,7 @@ const TheLayout = () => {
       history.replace('/login')
     }
   }
-  useEffect(() => {
+  useEffect(async () => {
     getUser()
   }, [])
   return (

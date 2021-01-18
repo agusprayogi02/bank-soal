@@ -26,10 +26,12 @@ import CIcon from '@coreui/icons-react'
 import useToken from '../../../app/useToken'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
+import useUser from '../../../app/useUser'
 
 const Login = () => {
   const dispatch = useDispatch()
   const {setToken} = useToken()
+  const {setUser} = useUser()
   const history = useHistory()
   const {error, user} = useSelector((state) => state.userdata)
   const [visible, setVisible] = useState(false)
@@ -41,6 +43,7 @@ const Login = () => {
   const syncron = () => {
     if (user.uid !== undefined) {
       setToken(String(user.uid))
+      setUser(user)
       history.push('/')
     } else {
       setTimeout(() => {

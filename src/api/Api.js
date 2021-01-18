@@ -63,6 +63,7 @@ export async function login(email = '', password = '') {
       headers: {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'},
     })
     return apiResult(data)
+  } else {
+    throw new Error('Is Required Email and Password!')
   }
-  throw new Error('Is Required Email and Password!')
 }

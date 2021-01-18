@@ -18,7 +18,6 @@ const User = ({match}) => {
           </span>,
         ],
       ]
-
   return (
     <CRow>
       <CCol lg={6}>
