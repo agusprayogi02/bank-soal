@@ -86,6 +86,7 @@ export const fetchUserdata = (id) => async (dispatch) => {
 export const fetchLogin = (email, password) => async (dispatch) => {
   try {
     dispatch(getUsersStart())
+    dispatch(resetError())
     const user = await login(email, password)
     dispatch(getUserdataSuccess(user))
   } catch (err) {
@@ -95,6 +96,7 @@ export const fetchLogin = (email, password) => async (dispatch) => {
 export const fetchRegister = (res = null, id = '') => async (dispatch) => {
   try {
     dispatch(getUsersStart())
+    dispatch(resetError())
     const user = await postRegister(res, id)
     dispatch(getUserdataSuccess(user))
   } catch (err) {
