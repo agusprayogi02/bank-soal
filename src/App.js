@@ -20,10 +20,11 @@ const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 const App = () => {
   return (
     <BrowserRouter>
-      <React.Suspense fallback={loading}>
+     <React.Suspense fallback={loading}>
         <Switch>
           <Route exact path="/login" name="Login Page" render={(props) => <Login {...props} />} />
           <Route
+
             exact
             path="/register"
             name="Register Page"

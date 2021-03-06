@@ -22,7 +22,7 @@ const Pelajaran = () => {
             return (
               <CCol sm="6" lg="3" key={i}>
                 <CCard>
-                  <CCardBody color="gradient-warning">
+                  <CCardBody color="gradient-warning" className="text-center">
                     <CIcon name="cil-calendar" height="52" className="my-4" />
                   </CCardBody>
                   <CCardFooter className="text-center">
