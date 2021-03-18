@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {Link} from 'react-router-dom'
+import React, {useState, useEffect} from 'react';
+import {Link} from 'react-router-dom';
 import {
   CButton,
   CCard,
@@ -18,42 +18,43 @@ import {
   CToastBody,
   CToastHeader,
   CInputGroupAppend,
-} from '@coreui/react'
-import {useDispatch, useSelector} from 'react-redux'
-import {useHistory} from 'react-router-dom'
-import {fetchLogin, resetError} from '../../../features/userdata/userdataSlice'
-import CIcon from '@coreui/icons-react'
-import useToken from '../../../app/useToken'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons'
-import useUser from '../../../app/useUser'
+} from '@coreui/react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useHistory} from 'react-router-dom';
+import {fetchLogin, resetError} from '../../../features/userdata/userdataSlice';
+import CIcon from '@coreui/icons-react';
+import useToken from '../../../app/useToken';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
+import useUser from '../../../app/useUser';
 
 const Login = () => {
-  const dispatch = useDispatch()
-  const {setToken} = useToken()
-  const {setUser} = useUser()
-  const history = useHistory()
-  const {error, user} = useSelector((state) => state.userdata)
-  const [visible, setVisible] = useState(false)
+  const dispatch = useDispatch();
+  const {setToken} = useToken();
+  const {setUser} = useUser();
+  const history = useHistory();
+  const {error, user} = useSelector((state) => state.userdata);
+  const [visible, setVisible] = useState(false);
   const onLogin = (e) => {
-    e.preventDefault()
-    var target = e.target
-    dispatch(fetchLogin(target[0].value, target[1].value))
-  }
+    e.preventDefault();
+    var target = e.target;
+    console.log(target);
+    dispatch(fetchLogin(target[0].value, target[1].value));
+  };
   const syncron = () => {
     if (user.uid !== undefined) {
-      setToken(String(user.uid))
-      setUser(user)
-      history.push('/')
+      setToken(String(user.uid));
+      setUser(user);
+      history.push('/');
     } else {
       setTimeout(() => {
-        dispatch(resetError())
-      }, 3000)
+        dispatch(resetError());
+      }, 3000);
     }
-  }
+  };
   useEffect(() => {
-    syncron()
-  }, [user, error])
+    syncron();
+  }, [user, error]);
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -139,7 +140,7 @@ const Login = () => {
         </CToaster>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

@@ -1,24 +1,35 @@
-import React, {useEffect} from 'react'
-import {CCard, CCardBody, CCardFooter, CCardHeader, CCol, CRow} from '@coreui/react'
-import {useDispatch, useSelector} from 'react-redux'
-import {getPelajaranByid} from '../../../features/pelajaran/pelajaranSlice'
-import useToken from '../../../app/useToken'
-import CIcon from '@coreui/icons-react'
+import React, {useEffect} from 'react';
+import {CButton, CCard, CCardBody, CCardFooter, CCardHeader, CCol, CRow} from '@coreui/react';
+import {useDispatch, useSelector} from 'react-redux';
+import {getPelajaranByid} from '../../../features/pelajaran/pelajaranSlice';
+import useToken from '../../../app/useToken';
+import CIcon from '@coreui/icons-react';
 
 const Pelajaran = () => {
-  const dispatch = useDispatch()
-  const {token} = useToken()
-  const {pelajaran} = useSelector((state) => state.pelajaran)
+  const dispatch = useDispatch();
+  const {token} = useToken();
+  const {pelajaran} = useSelector((state) => state.pelajaran);
   useEffect(() => {
-    dispatch(getPelajaranByid(token))
-  }, [])
+    dispatch(getPelajaranByid(token));
+  }, []);
   return (
     <CCard>
-      <CCardHeader>Mata Pelajaran</CCardHeader>
+      <CCardHeader>
+        <CRow>
+          <CCol>
+            <h4>Mata Pelajaran</h4>
+          </CCol>
+          <CCol sm={2}>
+            <CButton color="primary" className="px-4" variant="ghost">
+              Tambah
+            </CButton>
+          </CCol>
+        </CRow>
+      </CCardHeader>
       <CCardBody>
         <CRow>
           {pelajaran.map((e, i) => {
-            console.log(e)
+            console.log(e);
             return (
               <CCol sm="6" lg="3" key={i}>
                 <CCard>
@@ -33,12 +44,12 @@ const Pelajaran = () => {
                   </CCardFooter>
                 </CCard>
               </CCol>
-            )
+            );
           })}
         </CRow>
       </CCardBody>
     </CCard>
-  )
-}
+  );
+};
 
-export default Pelajaran
+export default Pelajaran;
