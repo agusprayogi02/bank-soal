@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react';
 import {
   CButton,
   CCard,
@@ -23,47 +23,47 @@ import {
   CToastBody,
   CToaster,
   CToastHeader,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import {getSekolahAll, postSekolah} from '../../../api/Api'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faBookOpen, faEye, faEyeSlash, faSchool} from '@fortawesome/free-solid-svg-icons'
-import {useHistory} from 'react-router-dom'
-import {useDispatch, useSelector} from 'react-redux'
-import {fetchRegister, getUserFailure, resetError} from '../../../features/userdata/userdataSlice'
-import useToken from '../../../app/useToken'
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import {getSekolahAll, postSekolah} from '../../../api/Api';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faBookOpen, faEye, faEyeSlash, faSchool} from '@fortawesome/free-solid-svg-icons';
+import {useHistory} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchRegister, getUserFailure, resetError} from '../../../features/userdata/userdataSlice';
+import useToken from '../../../app/useToken';
 
 const Register = () => {
-  const history = useHistory()
-  const dispatch = useDispatch()
-  const {error, user} = useSelector((state) => state.userdata)
-  const {setToken} = useToken()
-  const [visible, setVisible] = useState(false)
-  const [sekolah, setSekolah] = useState([])
-  const [modal, setModal] = useState(false)
-  const [kelas, setKelas] = useState('0')
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const {error, user} = useSelector((state) => state.userdata);
+  const {setToken} = useToken();
+  const [visible, setVisible] = useState(false);
+  const [sekolah, setSekolah] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [kelas, setKelas] = useState('0');
   const onsubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     var err,
-      target = e.target
+      target = e.target;
     if (target[3].value !== target[4].value) {
       err = {
         name: 'Error',
         message: 'Password Tidak Sama!!',
-      }
-      dispatch(getUserFailure(err))
+      };
+      dispatch(getUserFailure(err));
     } else if (target[5].value === '0') {
       err = {
         name: 'Error',
         message: 'Jenis Kelamin Harus diisi!!',
-      }
-      dispatch(getUserFailure(err))
+      };
+      dispatch(getUserFailure(err));
     } else if (target[6].value === '0') {
       err = {
         name: 'Error',
         message: 'Kelas Harus diisi!!',
-      }
-      dispatch(getUserFailure(err))
+      };
+      dispatch(getUserFailure(err));
     } else {
       var user = {
         firstName: target[0].value,
@@ -72,45 +72,45 @@ const Register = () => {
         password: target[3].value,
         jk: target[5].value,
         role: 'siswa',
-      }
-      dispatch(fetchRegister(user, target[6].value))
+      };
+      dispatch(fetchRegister(user, target[6].value));
     }
-  }
+  };
   const syncron = () => {
     if (user.uid !== undefined) {
-      setToken(String(user.uid))
-      history.push('/')
+      setToken(String(user.uid));
+      history.push('/');
     } else {
       setTimeout(() => {
-        dispatch(resetError())
-      }, 3000)
+        dispatch(resetError());
+      }, 3000);
     }
-  }
+  };
   const onSave = (e) => {
-    e.preventDefault()
-    var target = e.target
+    e.preventDefault();
+    var target = e.target;
     var save = {
       nama: target[0].value,
       kelas: Number(target[1].value),
       jurusan: target[2].value,
-    }
+    };
     postSekolah(save).then((val) => {
-      setModal(!modal)
-      sekolah.push(val)
-      setSekolah(sekolah)
-      setKelas(val.id)
-    })
-  }
+      setModal(!modal);
+      sekolah.push(val);
+      setSekolah(sekolah);
+      setKelas(val.id);
+    });
+  };
 
   useEffect(() => {
     getSekolahAll().then((res) => {
-      setSekolah(res)
-    })
-    syncron()
+      setSekolah(res);
+    });
+    syncron();
     return () => {
-      setSekolah([])
-    }
-  }, [user, error])
+      setSekolah([]);
+    };
+  }, [user, error]);
   return (
     <div className="c-app c-default-layout flex-row align-items-center">
       <CContainer>
@@ -316,7 +316,7 @@ const Register = () => {
         </CForm>
       </CModal>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

@@ -1,14 +1,52 @@
-import React, {useEffect} from 'react';
-import {CButton, CCard, CCardBody, CCardFooter, CCardHeader, CCol, CRow} from '@coreui/react';
+import React, {useEffect, useState} from 'react';
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardFooter,
+  CCardHeader,
+  CCol,
+  CForm,
+  CInput,
+  CInputFile,
+  CInputGroup,
+  CInputGroupPrepend,
+  CInputGroupText,
+  CLabel,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CRow,
+  CTextarea,
+} from '@coreui/react';
 import {useDispatch, useSelector} from 'react-redux';
-import {getPelajaranByid} from '../../../features/pelajaran/pelajaranSlice';
+import {getPelajaranByid, postPelajaran} from '../../../features/pelajaran/pelajaranSlice';
 import useToken from '../../../app/useToken';
 import CIcon from '@coreui/icons-react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faHome} from '@fortawesome/free-solid-svg-icons';
 
 const Pelajaran = () => {
   const dispatch = useDispatch();
   const {token} = useToken();
   const {pelajaran} = useSelector((state) => state.pelajaran);
+  const [modal, setModal] = useState(false);
+  const [file, setFile] = useState(null);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    var target = e.target,
+      form = new FormData();
+    console.log(target[2].files[0]);
+    form.append('nama', target[0].value);
+    form.append('deskripsi', target[1].value);
+    form.append('image', target[2].files[0]);
+    form.append('uid', token);
+    dispatch(postPelajaran(form));
+  };
+  const toggle = () => {
+    setModal(!modal);
+  };
   useEffect(() => {
     dispatch(getPelajaranByid(token));
   }, []);
@@ -20,7 +58,7 @@ const Pelajaran = () => {
             <h4>Mata Pelajaran</h4>
           </CCol>
           <CCol sm={2}>
-            <CButton color="primary" className="px-4" variant="ghost">
+            <CButton color="primary" onClick={toggle} className="px-4" variant="outline">
               Tambah
             </CButton>
           </CCol>
@@ -47,6 +85,50 @@ const Pelajaran = () => {
             );
           })}
         </CRow>
+        <div>
+          <CModal show={modal} onClose={toggle}>
+            <CModalHeader closeButton>Tambah Kelas</CModalHeader>
+            <CForm method="post" onSubmit={(e) => onSubmit(e)} formEncType="multipart/form-data">
+              <CModalBody>
+                <CInputGroup className="mb-3">
+                  <CInputGroupPrepend>
+                    <CInputGroupText>
+                      <FontAwesomeIcon icon={faHome} />
+                    </CInputGroupText>
+                  </CInputGroupPrepend>
+                  <CInput type="text" name="nama" placeholder="Masukkan nama.." required />
+                </CInputGroup>
+                <CTextarea
+                  rows={4}
+                  type="text"
+                  name="nama"
+                  placeholder="Masukkan Deskripsi.."
+                  required
+                />
+                <div className="custom-file mt-3">
+                  <CInputFile
+                    placeholder="File"
+                    name="file"
+                    id="file"
+                    className="custom-file-input"
+                    onChange={(e) => setFile(e.target.files[0].name)}
+                  />
+                  <CLabel className="custom-file-label" htmlFor="file">
+                    {file ?? 'Pilih File'}
+                  </CLabel>
+                </div>
+              </CModalBody>
+              <CModalFooter>
+                <CButton type="submit" color="primary">
+                  Submit
+                </CButton>
+                <CButton color="secondary" onClick={toggle}>
+                  Cancel
+                </CButton>
+              </CModalFooter>
+            </CForm>
+          </CModal>
+        </div>
       </CCardBody>
     </CCard>
   );

@@ -11,9 +11,7 @@ export async function getApiUsers() {
 export async function postRegister(res = null, id = '') {
   if (res !== null && id !== '') {
     var dt = Object.assign(res, {role: 'guru'});
-    const {data} = await axios.post(BASE_URL + '/users/' + id, qs.stringify(dt), {
-      headers: {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'},
-    });
+    const {data} = await axios.post(BASE_URL + '/users/' + id, qs.stringify(dt));
     return apiResult(data);
   } else {
     throw new Error('required Id');
@@ -22,9 +20,7 @@ export async function postRegister(res = null, id = '') {
 
 export async function postSekolah(res = null) {
   if (res !== null) {
-    const {data} = await axios.post(BASE_URL + '/sekolah/save', qs.stringify(res), {
-      headers: {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'},
-    });
+    const {data} = await axios.post(BASE_URL + '/sekolah/save', qs.stringify(res));
     return apiResult(data);
   } else {
     throw new Error('required Id');
@@ -60,9 +56,7 @@ export async function login(email = '', password = '') {
       email: email,
       password: password,
     };
-    const {data} = await axios.post(BASE_URL + '/users/login', qs.stringify(val), {
-      headers: {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'},
-    });
+    const {data} = await axios.post(BASE_URL + '/users/login', qs.stringify(val));
     console.log(data);
     if (data.role == 'siswa') {
       throw new Error('Siswa bisa login menggunakan app mobile!');
