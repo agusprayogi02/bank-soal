@@ -1,5 +1,5 @@
-import React from 'react'
-import {useSelector, useDispatch} from 'react-redux'
+import React from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {
   CHeader,
   CToggler,
@@ -10,33 +10,28 @@ import {
   CSubheader,
   CBreadcrumbRouter,
   CLink,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
 
 // routes config
-import routes from '../routes'
+import routes from '../routes';
 
-import {
-  TheHeaderDropdown,
-  TheHeaderDropdownMssg,
-  TheHeaderDropdownNotif,
-  TheHeaderDropdownTasks,
-} from './index'
-import {selectBar, showBar} from '../features/showbar/showbarSlice'
+import {TheHeaderDropdown} from './index';
+import {selectBar, showBar} from '../features/showbar/showbarSlice';
 
 const TheHeader = () => {
-  const dispatch = useDispatch()
-  const sidebarShow = useSelector(selectBar)
+  const dispatch = useDispatch();
+  const sidebarShow = useSelector(selectBar);
 
   const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
-    dispatch(showBar(val))
-  }
+    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive';
+    dispatch(showBar(val));
+  };
 
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
-    dispatch(showBar(val))
-  }
+    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive';
+    dispatch(showBar(val));
+  };
   return (
     <CHeader withSubheader>
       <CToggler inHeader className="ml-md-3 d-lg-none" onClick={toggleSidebarMobile} />
@@ -58,9 +53,6 @@ const TheHeader = () => {
       </CHeaderNav>
 
       <CHeaderNav className="px-3">
-        <TheHeaderDropdownNotif />
-        <TheHeaderDropdownTasks />
-        <TheHeaderDropdownMssg />
         <TheHeaderDropdown />
       </CHeaderNav>
 
@@ -81,7 +73,7 @@ const TheHeader = () => {
         </div>
       </CSubheader>
     </CHeader>
-  )
-}
+  );
+};
 
-export default TheHeader
+export default TheHeader;

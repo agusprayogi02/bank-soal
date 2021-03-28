@@ -8,12 +8,14 @@ import {
   CCardImg,
   CCol,
   CForm,
+  CImg,
   CInput,
   CInputFile,
   CInputGroup,
   CInputGroupPrepend,
   CInputGroupText,
   CLabel,
+  CLink,
   CModal,
   CModalBody,
   CModalFooter,
@@ -39,7 +41,7 @@ const Pelajaran = () => {
     e.preventDefault();
     var target = e.target,
       form = new FormData();
-    console.log(target[2].files[0]);
+    // console.log(target[2].files[0]);
     form.append('nama', target[0].value);
     form.append('deskripsi', target[1].value);
     form.append('image', target[2].files[0]);
@@ -48,6 +50,7 @@ const Pelajaran = () => {
   };
   const toggle = () => {
     setModal(!modal);
+    setFile(null);
   };
   useEffect(() => {
     dispatch(getPelajaranByid(token));
@@ -69,7 +72,6 @@ const Pelajaran = () => {
       <CCardBody>
         <CRow>
           {pelajaran.map((e, i) => {
-            console.log(e);
             return (
               <CCol sm="6" lg="3" key={i}>
                 <CCard>
@@ -81,10 +83,10 @@ const Pelajaran = () => {
                     </CCardBody>
                   )}
                   <CCardFooter className="text-center">
-                    <h4>
-                      <b>{e.nama}</b>
-                    </h4>
-                    <p className="text-dark">{e.deskripsi}</p>
+                    <CLink className="h3 mb-2" href={'/pelajaran/' + e.kdPelajaran}>
+                      {e.nama}
+                    </CLink>
+                    <p className="text-dark font-smaller">{e.deskripsi}</p>
                   </CCardFooter>
                 </CCard>
               </CCol>
@@ -111,18 +113,27 @@ const Pelajaran = () => {
                   placeholder="Masukkan Deskripsi.."
                   required
                 />
-                <div className="custom-file mt-3">
-                  <CInputFile
-                    placeholder="File"
-                    name="file"
-                    id="file"
-                    className="custom-file-input"
-                    onChange={(e) => setFile(e.target.files[0].name)}
-                  />
-                  <CLabel className="custom-file-label" htmlFor="file">
-                    {file ?? 'Pilih File'}
-                  </CLabel>
-                </div>
+                <CRow className="mt-3">
+                  {file != null && (
+                    <CCol sm="4">
+                      <CImg src={URL.createObjectURL(file)} thumbnail />
+                    </CCol>
+                  )}
+                  <CCol>
+                    <div className="custom-file">
+                      <CInputFile
+                        placeholder="File"
+                        name="file"
+                        id="file"
+                        className="custom-file-input"
+                        onChange={(e) => setFile(e.target.files[0])}
+                      />
+                      <CLabel className="custom-file-label" htmlFor="file">
+                        {file ? file.name : 'Pilih File'}
+                      </CLabel>
+                    </div>
+                  </CCol>
+                </CRow>
               </CModalBody>
               <CModalFooter>
                 <CButton type="submit" color="primary">
