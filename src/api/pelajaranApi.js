@@ -5,7 +5,8 @@ import {apiResult} from './apiResult';
 
 export async function getApiPelajaranByuid(uid = '') {
   if (uid !== '') {
-    const {data} = await axios.get(BASE_URL + '/pelajaran/' + uid);
+    const {data} = await axios.get(BASE_URL + '/users/pelajaran/' + uid);
+    console.log(data);
     return apiResult(data);
   } else {
     throw new Error('required id');

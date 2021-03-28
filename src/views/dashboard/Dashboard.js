@@ -1,16 +1,16 @@
-import React, {lazy} from 'react'
-import {CButton, CButtonGroup, CCard, CCardBody, CCol, CRow} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import React, {lazy} from 'react';
+import {CButton, CButtonGroup, CCard, CCardBody, CCol, CRow} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
 
-import MainChartExample from '../charts/MainChartExample.js'
-import {useSelector} from 'react-redux'
+import MainChartExample from '../charts/MainChartExample.js';
+// import {useSelector} from 'react-redux';
 
-const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'))
-const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'))
+const WidgetsDropdown = lazy(() => import('../widgets/WidgetsDropdown.js'));
+const WidgetsBrand = lazy(() => import('../widgets/WidgetsBrand.js'));
 
 const Dashboard = () => {
-  const {user} = useSelector((state) => state.userdata)
-  console.log(user)
+  // const {user} = useSelector((state) => state.userdata);
+  // console.log(user)
   return (
     <>
       <WidgetsDropdown />
@@ -46,7 +46,7 @@ const Dashboard = () => {
 
       <WidgetsBrand withCharts />
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

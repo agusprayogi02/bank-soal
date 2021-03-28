@@ -5,6 +5,7 @@ import {
   CCardBody,
   CCardFooter,
   CCardHeader,
+  CCardImg,
   CCol,
   CForm,
   CInput,
@@ -26,6 +27,7 @@ import useToken from '../../../app/useToken';
 import CIcon from '@coreui/icons-react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHome} from '@fortawesome/free-solid-svg-icons';
+import {BASE_URL} from '../../../utils';
 
 const Pelajaran = () => {
   const dispatch = useDispatch();
@@ -71,9 +73,13 @@ const Pelajaran = () => {
             return (
               <CCol sm="6" lg="3" key={i}>
                 <CCard>
-                  <CCardBody color="gradient-warning" className="text-center">
-                    <CIcon name="cil-calendar" height="52" className="my-4" />
-                  </CCardBody>
+                  {e.gambar != null ? (
+                    <CCardImg variant="full" src={BASE_URL + '/pelajaran/' + e.gambar} />
+                  ) : (
+                    <CCardBody color="gradient-warning" className="text-center">
+                      <CIcon name="cil-calendar" height="52" className="my-4" />
+                    </CCardBody>
+                  )}
                   <CCardFooter className="text-center">
                     <h4>
                       <b>{e.nama}</b>
