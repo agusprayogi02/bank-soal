@@ -1,12 +1,12 @@
-import React from 'react'
-import {CFooter} from '@coreui/react'
+import React from 'react';
+import {CFooter} from '@coreui/react';
 
 const TheFooter = () => {
-  var date = new Date()
+  var date = new Date();
   return (
     <CFooter fixed={false}>
       <div>
-        <a href="https://coreui.io" target="_blank" rel="noopener noreferrer">
+        <a href="" target="_blank" rel="noopener noreferrer">
           Bank Soal
         </a>
         <span className="ml-1">&copy; {date.getFullYear()}</span>
@@ -18,7 +18,7 @@ const TheFooter = () => {
         </a>
       </div>
     </CFooter>
-  )
-}
+  );
+};
 
-export default React.memo(TheFooter)
+export default React.memo(TheFooter);

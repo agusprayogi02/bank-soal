@@ -30,11 +30,13 @@ import CIcon from '@coreui/icons-react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHome} from '@fortawesome/free-solid-svg-icons';
 import {BASE_URL} from '../../../utils';
+import {useHistory} from 'react-router';
 
 const Pelajaran = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const {token} = useToken();
-  const {pelajaran} = useSelector((state) => state.pelajaran);
+  const {pelajaran, error} = useSelector((state) => state.pelajaran);
   const [modal, setModal] = useState(false);
   const [file, setFile] = useState(null);
   const onSubmit = (e) => {
@@ -47,10 +49,15 @@ const Pelajaran = () => {
     form.append('image', target[2].files[0]);
     form.append('uid', token);
     dispatch(postPelajaran(form));
+    if (!error) {
+      toggle();
+    }
   };
   const toggle = () => {
     setModal(!modal);
     setFile(null);
+    Array.from(document.querySelectorAll('input')).forEach((input) => (input.value = ''));
+    document.querySelector('textarea').value = '';
   };
   useEffect(() => {
     dispatch(getPelajaranByid(token));
@@ -76,14 +83,20 @@ const Pelajaran = () => {
               <CCol sm="6" lg="3" key={i}>
                 <CCard>
                   {e.gambar != null ? (
-                    <CCardImg variant="full" src={BASE_URL + '/pelajaran/' + e.gambar} />
+                    <CCardImg
+                      height={150}
+                      variant="full"
+                      src={BASE_URL + '/pelajaran/' + e.gambar}
+                    />
                   ) : (
                     <CCardBody color="gradient-warning" className="text-center">
                       <CIcon name="cil-calendar" height="52" className="my-4" />
                     </CCardBody>
                   )}
                   <CCardFooter className="text-center">
-                    <CLink className="h3 mb-2" href={'/pelajaran/' + e.kdPelajaran}>
+                    <CLink
+                      className="h3 mb-2"
+                      onClick={() => history.push('/pelajaran/' + e.kdPelajaran)}>
                       {e.nama}
                     </CLink>
                     <p className="text-dark font-smaller">{e.deskripsi}</p>

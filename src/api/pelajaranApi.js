@@ -12,6 +12,15 @@ export async function getApiPelajaranByuid(uid = '') {
   }
 }
 
+export async function getApiPelajaranId(id = '') {
+  if (id != '') {
+    const {data} = await axios.get(BASE_URL + '/pelajaran/' + id);
+    return apiResult(data);
+  } else {
+    throw new Error('required Id');
+  }
+}
+
 export async function createPelajaran(res = null) {
   if (res !== null) {
     const {data} = await axios.post(BASE_URL + '/pelajaran/create', res);
