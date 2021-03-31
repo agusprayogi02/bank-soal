@@ -5,6 +5,7 @@ const Users = React.lazy(() => import('./views/users/Users'));
 const User = React.lazy(() => import('./views/users/User'));
 const Pelajaran = React.lazy(() => import('./views/pages/pelajaran/Pelajaran'));
 const PelajaranItem = React.lazy(() => import('./views/pages/pelajaran/PelajaranItem'));
+const Kuis = React.lazy(() => import('./views/pages/kuis/Kuis'));
 
 const routes = [
   {path: '/', exact: true, name: 'Home'},
@@ -13,6 +14,7 @@ const routes = [
   {path: '/users/:id', exact: true, name: 'User Details', component: User},
   {path: '/pelajaran', exact: true, name: 'List Pelajaran', component: Pelajaran},
   {path: '/pelajaran/:id', exact: true, name: 'Pelajaran', component: PelajaranItem},
+  {path: '/pelajaran/:id/:kd', exact: true, name: 'Kuis', component: Kuis},
 ];
 
 export default routes;

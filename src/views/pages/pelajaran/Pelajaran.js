@@ -26,11 +26,11 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {getPelajaranByid, postPelajaran} from '../../../features/pelajaran/pelajaranSlice';
 import useToken from '../../../app/useToken';
-import CIcon from '@coreui/icons-react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHome} from '@fortawesome/free-solid-svg-icons';
 import {BASE_URL} from '../../../utils';
 import {useHistory} from 'react-router';
+import CIcon from '@coreui/icons-react';
 
 const Pelajaran = () => {
   const dispatch = useDispatch();
@@ -90,16 +90,16 @@ const Pelajaran = () => {
                     />
                   ) : (
                     <CCardBody color="gradient-warning" className="text-center">
-                      <CIcon name="cil-calendar" height="52" className="my-4" />
+                      <CIcon name="cil-school" height="64" className="my-4" />
                     </CCardBody>
                   )}
                   <CCardFooter className="text-center">
                     <CLink
-                      className="h3 mb-2"
+                      className="h3"
                       onClick={() => history.push('/pelajaran/' + e.kdPelajaran)}>
                       {e.nama}
                     </CLink>
-                    <p className="text-dark font-smaller">{e.deskripsi}</p>
+                    <p className="text-dark font-sm text-justify mb-1 mt-2">{e.deskripsi}</p>
                   </CCardFooter>
                 </CCard>
               </CCol>
@@ -117,15 +117,9 @@ const Pelajaran = () => {
                       <FontAwesomeIcon icon={faHome} />
                     </CInputGroupText>
                   </CInputGroupPrepend>
-                  <CInput type="text" name="nama" placeholder="Masukkan nama.." required />
+                  <CInput type="text" placeholder="Masukkan nama.." required />
                 </CInputGroup>
-                <CTextarea
-                  rows={4}
-                  type="text"
-                  name="nama"
-                  placeholder="Masukkan Deskripsi.."
-                  required
-                />
+                <CTextarea rows={4} type="text" placeholder="Masukkan Deskripsi.." required />
                 <CRow className="mt-3">
                   {file != null && (
                     <CCol sm="4">
