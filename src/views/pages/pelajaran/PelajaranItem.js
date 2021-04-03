@@ -40,6 +40,7 @@ import {getApiPelajaranId} from '../../../api/pelajaranApi';
 import {BASE_URL} from '../../../utils';
 import CIcon from '@coreui/icons-react';
 import {useHistory} from 'react-router';
+import './pelajaran.css';
 
 const PelajaranItem = ({match}) => {
   var id = match.params.id;
@@ -97,35 +98,56 @@ const PelajaranItem = ({match}) => {
         </CRow>
       </CCardHeader>
       <CCardBody>
-        {kuis.map((dt, i) => {
-          return (
-            <CCol sm="6" lg="3" key={i}>
-              <CCard>
-                {dt.gambar != null ? (
-                  <CCardImg height={150} variant="full" src={BASE_URL + '/kuis/' + dt.gambar} />
-                ) : (
-                  <CCardBody color="gradient-warning" className="text-center">
-                    <CIcon name="cil-school" height="64" className="my-4" />
+        <CRow>
+          {kuis.map((dt, i) => {
+            return (
+              <CCol sm="6" lg="3" key={i}>
+                <CCard>
+                  <div className="bg-gradient-info text-center action-top">
+                    <CRow>
+                      <CCol>
+                        <CButton>
+                          <CIcon className="text-white" name="cil-pencil" heigh={24} />
+                        </CButton>
+                      </CCol>
+                      <CCol>
+                        <CButton>
+                          <CIcon className="text-white" name="cil-trash" heigh={24} />
+                        </CButton>
+                      </CCol>
+                    </CRow>
+                  </div>
+                  {dt.gambar != null ? (
+                    <CCardImg
+                      height={150}
+                      variant="full"
+                      style={{objectFit: 'cover'}}
+                      src={BASE_URL + '/kuis/' + dt.gambar}
+                    />
+                  ) : (
+                    <CCardBody color="gradient-warning" className="text-center">
+                      <CIcon name="cil-school" height="64" className="my-4" />
+                    </CCardBody>
+                  )}
+                  <CCardBody className="text-center">
+                    <CLink
+                      className="h3"
+                      onClick={() =>
+                        history.push('/pelajaran/' + pelajaran.kdPelajaran + '/' + dt.kd)
+                      }>
+                      {dt.nama}
+                    </CLink>
                   </CCardBody>
-                )}
-                <CCardBody className="text-center">
-                  <CLink
-                    className="h3"
-                    onClick={() =>
-                      history.push('/pelajaran/' + pelajaran.kdPelajaran + '/' + dt.kd)
-                    }>
-                    {dt.nama}
-                  </CLink>
-                </CCardBody>
-                <CCardFooter>
-                  <CAlert color="primary" className="p-1 text-center m-1">
-                    {dt.kd}
-                  </CAlert>
-                </CCardFooter>
-              </CCard>
-            </CCol>
-          );
-        })}
+                  <CCardFooter>
+                    <CAlert color="primary" className="p-1 text-center m-1">
+                      {dt.kd}
+                    </CAlert>
+                  </CCardFooter>
+                </CCard>
+              </CCol>
+            );
+          })}
+        </CRow>
       </CCardBody>
       <CCardFooter>Kode Pelajaran: {pelajaran.kdPelajaran}</CCardFooter>
       {error !== null && (
