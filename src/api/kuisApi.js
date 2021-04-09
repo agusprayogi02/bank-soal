@@ -29,4 +29,13 @@ const postKuisApi = async (res = null) => {
   }
 };
 
-export {getKuisApi, postKuisApi, getKuisOneApi};
+const removeKuisApi = async (kd = null) => {
+  if (kd != null) {
+    const {data} = await axios.delete(BASE_URL + '/kuis/' + kd);
+    return apiResult(data);
+  } else {
+    throw new Error('Tidak ada data yang dimasukkan!');
+  }
+};
+
+export {getKuisApi, postKuisApi, getKuisOneApi, removeKuisApi};

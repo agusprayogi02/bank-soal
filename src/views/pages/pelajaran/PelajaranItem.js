@@ -35,21 +35,38 @@ import {
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faGamepad} from '@fortawesome/free-solid-svg-icons';
 import {useDispatch, useSelector} from 'react-redux';
-import {createKuis, getKuis, getKuisFailure} from '../../../features/kuis';
+import {createKuis, getKuis, getKuisFailure, removeKuis} from '../../../features/kuis';
 import {getApiPelajaranId} from '../../../api/pelajaranApi';
 import {BASE_URL} from '../../../utils';
 import CIcon from '@coreui/icons-react';
 import {useHistory} from 'react-router';
 import './pelajaran.css';
+import Swal from 'sweetalert2';
 
 const PelajaranItem = ({match}) => {
   var id = match.params.id;
   const [modal, setModal] = useState(false);
+  const [buat, setBuat] = useState(false);
   const history = useHistory();
   const [pelajaran, setPelajaran] = useState({});
   const [file, setFile] = useState(null);
   const dispatch = useDispatch();
   const {kuis, isLoading, error} = useSelector((state) => state.kuis);
+  const Fire = Swal.mixin({
+    showConfirmButton: true,
+    showCancelButton: true,
+  });
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
   const getPelajaran = async () => {
     try {
       var data = await getApiPelajaranId(id);
@@ -69,13 +86,48 @@ const PelajaranItem = ({match}) => {
     form.append('image', target[3].files[0]);
     form.append('kd', id);
     dispatch(createKuis(form));
+    Toast.fire({
+      icon: 'success',
+      title: 'Berhasil menambahkan Kuis!',
+    });
     toggle();
   };
   const toggle = () => {
     setModal(!modal);
     setFile(null);
-    Array.from(document.querySelectorAll('input')).forEach((input) => (input.value = ''));
-    document.querySelector('textarea').value = '';
+    if (modal) {
+      Array.from(document.querySelectorAll('input')).forEach((input) => (input.value = ''));
+      document.querySelector('textarea').value = '';
+    }
+  };
+  const onDelete = async (e, data) => {
+    e.preventDefault();
+    var {isConfirmed} = await Fire.fire({
+      icon: 'question',
+      title: 'Yakin Ingin hapus Kuis ' + data.nama + '?',
+    });
+    if (isConfirmed) {
+      dispatch(removeKuis(data.kd, id));
+    }
+  };
+
+  // ketika tombol tambah diklik
+  const tambah = () => {
+    setBuat(true);
+    toggle();
+  };
+  // ketika tombol update diklik
+  const ubah = (data) => {
+    setBuat(false);
+    console.log(data);
+    Array.from(document.querySelectorAll('input'))[0].value = data.nama;
+    Array.from(document.querySelectorAll('input'))[1].value = data.tenggat;
+    if (data.gambar != null) {
+      Array.from(document.querySelectorAll('input'))[2].value = data.gambar;
+      setFile(data.gambar);
+    }
+    document.querySelector('textarea').value = data.deskripsi;
+    toggle();
   };
   useEffect(() => {
     dispatch(getKuis(id));
@@ -91,7 +143,7 @@ const PelajaranItem = ({match}) => {
         <CRow>
           <h4 className="col">Pelajaran {pelajaran.nama}</h4>
           <CCol md={2} className="text-center">
-            <CButton variant="outline" color="info" onClick={() => toggle()} className="px-4">
+            <CButton variant="outline" color="info" onClick={() => tambah()} className="px-4">
               Tambah
             </CButton>
           </CCol>
@@ -106,12 +158,12 @@ const PelajaranItem = ({match}) => {
                   <div className="bg-gradient-info text-center action-top">
                     <CRow>
                       <CCol>
-                        <CButton>
+                        <CButton onClick={() => ubah(dt)}>
                           <CIcon className="text-white" name="cil-pencil" heigh={24} />
                         </CButton>
                       </CCol>
                       <CCol>
-                        <CButton>
+                        <CButton onClick={(e) => onDelete(e, dt)}>
                           <CIcon className="text-white" name="cil-trash" heigh={24} />
                         </CButton>
                       </CCol>
@@ -119,7 +171,7 @@ const PelajaranItem = ({match}) => {
                   </div>
                   {dt.gambar != null ? (
                     <CCardImg
-                      height={150}
+                      height={180}
                       variant="full"
                       style={{objectFit: 'cover'}}
                       src={BASE_URL + '/kuis/' + dt.gambar}
@@ -129,7 +181,7 @@ const PelajaranItem = ({match}) => {
                       <CIcon name="cil-school" height="64" className="my-4" />
                     </CCardBody>
                   )}
-                  <CCardBody className="text-center">
+                  <CCardBody className="text-center p-2">
                     <CLink
                       className="h3"
                       onClick={() =>
@@ -164,7 +216,7 @@ const PelajaranItem = ({match}) => {
       )}
       <div>
         <CModal show={modal} onClose={toggle}>
-          <CModalHeader closeButton>Tambah Kuis</CModalHeader>
+          <CModalHeader closeButton>{buat ? 'Tambah Kuis' : 'Ubah Kuis'}</CModalHeader>
           <CForm method="post" onSubmit={(e) => onSubmit(e)} formEncType="multipart/form-data">
             <CModalBody>
               <CInputGroup className="mb-3">

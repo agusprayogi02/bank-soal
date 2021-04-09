@@ -6,4 +6,5 @@ export {
   createKuis,
   getKuis,
   getKuisOne,
+  removeKuis,
 } from './kuisSlice';

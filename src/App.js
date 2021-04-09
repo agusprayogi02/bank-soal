@@ -1,6 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import './scss/style.scss';
+import 'sweetalert2/src/sweetalert2.scss';
 
 const loading = (
   <div className="pt-3 text-center">

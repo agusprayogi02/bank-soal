@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {getKuisApi, getKuisOneApi, postKuisApi} from '../../api/kuisApi';
+import {getKuisApi, getKuisOneApi, postKuisApi, removeKuisApi} from '../../api/kuisApi';
 
 const kuisSlice = createSlice({
   name: 'kuis',
@@ -55,6 +55,17 @@ const createKuis = (res) => async (dispatch) => {
   }
 };
 
+const removeKuis = (kd, id) => async (dispatch) => {
+  try {
+    dispatch(getKuisStart());
+    await removeKuisApi(kd);
+    const kuis = await getKuisApi(id);
+    dispatch(getKuisSuccess(kuis));
+  } catch (error) {
+    dispatch(getKuisFailure(error));
+  }
+};
+
 export const {getKuisFailure, getKuisStart, getKuisSuccess} = kuisSlice.actions;
-export {kuisSlice, getKuis, createKuis, getKuisOne};
+export {kuisSlice, getKuis, createKuis, getKuisOne, removeKuis};
 export default kuisSlice.reducer;
