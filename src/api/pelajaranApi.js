@@ -29,3 +29,12 @@ export async function createPelajaran(res = null) {
     throw new Error('required Uid');
   }
 }
+
+export async function removePelajaranApi(kd = null) {
+  if (kd !== null) {
+    const {data} = await axios.delete(BASE_URL + '/pelajaran/' + kd);
+    return apiResult(data);
+  } else {
+    throw new Error('required Uid');
+  }
+}

@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {getApiPelajaranByuid, createPelajaran} from '../../api/pelajaranApi';
+import {getApiPelajaranByuid, createPelajaran, removePelajaranApi} from '../../api/pelajaranApi';
 
 export const pelajaranSlice = createSlice({
   name: 'pelajaran',
@@ -43,6 +43,17 @@ export const postPelajaran = (res) => async (dispatch) => {
   try {
     dispatch(getPelajaranStart());
     const pelajaran = await createPelajaran(res);
+    dispatch(getPelajaranSuccess(pelajaran));
+  } catch (error) {
+    dispatch(getPelajaranFailure(error));
+  }
+};
+
+export const removePelajaran = (kd, id) => async (dispatch) => {
+  try {
+    dispatch(getPelajaranStart());
+    await removePelajaranApi(kd);
+    const pelajaran = await getApiPelajaranByuid(id);
     dispatch(getPelajaranSuccess(pelajaran));
   } catch (error) {
     dispatch(getPelajaranFailure(error));

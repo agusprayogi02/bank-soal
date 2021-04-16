@@ -6,10 +6,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchUserdata} from '../features/userdata/userdataSlice';
 
 const TheLayout = () => {
+  const {token} = useToken();
   const dispatch = useDispatch();
   const history = useHistory();
   const {error} = useSelector((state) => state.userdata);
-  const {token} = useToken();
   const getUser = () => {
     if (token !== '') {
       dispatch(fetchUserdata(token));

@@ -21,24 +21,49 @@ import {
   CModalFooter,
   CModalHeader,
   CRow,
+  CSpinner,
   CTextarea,
 } from '@coreui/react';
 import {useDispatch, useSelector} from 'react-redux';
-import {getPelajaranByid, postPelajaran} from '../../../features/pelajaran/pelajaranSlice';
+import {
+  getPelajaranByid,
+  postPelajaran,
+  removePelajaran,
+} from '../../../features/pelajaran/pelajaranSlice';
 import useToken from '../../../app/useToken';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHome} from '@fortawesome/free-solid-svg-icons';
-import {BASE_URL} from '../../../utils';
+import {BASE_URL, Wsocket} from '../../../utils';
 import {useHistory} from 'react-router';
 import CIcon from '@coreui/icons-react';
+import Swal from 'sweetalert2';
 
 const Pelajaran = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const {token} = useToken();
-  const {pelajaran, error} = useSelector((state) => state.pelajaran);
+  const {pelajaran, error, isLoading} = useSelector((state) => state.pelajaran);
   const [modal, setModal] = useState(false);
+  const [buat, setBuat] = useState(false);
   const [file, setFile] = useState(null);
+  const socket = Wsocket(token);
+
+  const Fire = Swal.mixin({
+    showConfirmButton: true,
+    showCancelButton: true,
+  });
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
+
   const onSubmit = (e) => {
     e.preventDefault();
     var target = e.target,
@@ -50,6 +75,9 @@ const Pelajaran = () => {
     form.append('uid', token);
     dispatch(postPelajaran(form));
     if (!error) {
+      Toast.fire({
+        title: '',
+      });
       toggle();
     }
   };
@@ -59,10 +87,46 @@ const Pelajaran = () => {
     Array.from(document.querySelectorAll('input')).forEach((input) => (input.value = ''));
     document.querySelector('textarea').value = '';
   };
+  const onDelete = async (e, data) => {
+    e.preventDefault();
+    var {isConfirmed} = await Fire.fire({
+      icon: 'question',
+      title: 'Yakin Ingin hapus Kuis ' + data.nama + '?',
+    });
+    if (isConfirmed) {
+      dispatch(removePelajaran(data.kdPelajaran, token));
+    }
+  };
+
+  // ketika tombol tambah diklik
+  const tambah = () => {
+    setBuat(true);
+    toggle();
+  };
+  // ketika tombol update diklik
+  const ubah = (data) => {
+    setBuat(false);
+    console.log(data);
+    Array.from(document.querySelectorAll('input'))[0].value = data.nama;
+    Array.from(document.querySelectorAll('input'))[1].value = data.tenggat;
+    if (data.gambar != null) {
+      Array.from(document.querySelectorAll('input'))[2].value = data.gambar;
+      setFile(data.gambar);
+    }
+    document.querySelector('textarea').value = data.deskripsi;
+    toggle();
+  };
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log(socket.id);
+    });
+  }, []);
   useEffect(() => {
     dispatch(getPelajaranByid(token));
   }, []);
-  return (
+  return isLoading ? (
+    <CSpinner color="primary" style={{width: '4rem', height: '4rem'}} />
+  ) : (
     <CCard>
       <CCardHeader>
         <CRow>
@@ -70,7 +134,7 @@ const Pelajaran = () => {
             <h4>Mata Pelajaran</h4>
           </CCol>
           <CCol sm={2}>
-            <CButton color="primary" onClick={toggle} className="px-4" variant="outline">
+            <CButton color="primary" onClick={tambah} className="px-4" variant="outline">
               Tambah
             </CButton>
           </CCol>
@@ -82,6 +146,20 @@ const Pelajaran = () => {
             return (
               <CCol sm="6" lg="3" key={i}>
                 <CCard>
+                  <div className="bg-gradient-info text-center action-top">
+                    <CRow>
+                      <CCol>
+                        <CButton onClick={() => ubah(e)}>
+                          <CIcon className="text-white" name="cil-pencil" heigh={24} />
+                        </CButton>
+                      </CCol>
+                      <CCol>
+                        <CButton onClick={(event) => onDelete(event, e)}>
+                          <CIcon className="text-white" name="cil-trash" heigh={24} />
+                        </CButton>
+                      </CCol>
+                    </CRow>
+                  </div>
                   {e.gambar != null ? (
                     <CCardImg
                       height={150}
@@ -108,7 +186,7 @@ const Pelajaran = () => {
         </CRow>
         <div>
           <CModal show={modal} onClose={toggle}>
-            <CModalHeader closeButton>Tambah Kelas</CModalHeader>
+            <CModalHeader closeButton>{buat ? 'Tambah Kelas' : 'Ubah Kelas'}</CModalHeader>
             <CForm method="post" onSubmit={(e) => onSubmit(e)} formEncType="multipart/form-data">
               <CModalBody>
                 <CInputGroup className="mb-3">

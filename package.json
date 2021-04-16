@@ -32,6 +32,7 @@
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
     "sass-loader": "^8.0.2",
+    "socket.io-client": "^4.0.1",
     "sweetalert2": "^10.16.0"
   },
   "devDependencies": {
