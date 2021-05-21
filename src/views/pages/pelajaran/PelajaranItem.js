@@ -94,8 +94,8 @@ const PelajaranItem = ({match}) => {
   };
   const toggle = () => {
     setModal(!modal);
-    setFile(null);
     if (modal) {
+      setFile(null);
       Array.from(document.querySelectorAll('input')).forEach((input) => (input.value = ''));
       document.querySelector('textarea').value = '';
     }

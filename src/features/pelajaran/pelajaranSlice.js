@@ -1,5 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {getApiPelajaranByuid, createPelajaran, removePelajaranApi} from '../../api/pelajaranApi';
+import {
+  getApiPelajaranByuid,
+  createPelajaran,
+  removePelajaranApi,
+  updatePelajaran,
+} from '../../api/pelajaranApi';
 
 export const pelajaranSlice = createSlice({
   name: 'pelajaran',
@@ -44,6 +49,20 @@ export const postPelajaran = (res) => async (dispatch) => {
     dispatch(getPelajaranStart());
     const pelajaran = await createPelajaran(res);
     dispatch(getPelajaranSuccess(pelajaran));
+  } catch (error) {
+    dispatch(getPelajaranFailure(error));
+  }
+};
+
+export const putPelajaran = (res) => async (dispatch) => {
+  try {
+    dispatch(getPelajaranStart());
+    const result = await updatePelajaran(res);
+    if (result != null) {
+      const Pelajaran = await getApiPelajaranByuid(result.guru.uid);
+      dispatch(getPelajaranSuccess(Pelajaran));
+    }
+    dispatch(getPelajaranFailure({name: 'Error', error: 'Tidak ada Id yang sama dalam database!'}));
   } catch (error) {
     dispatch(getPelajaranFailure(error));
   }

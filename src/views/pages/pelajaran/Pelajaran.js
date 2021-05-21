@@ -28,6 +28,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   getPelajaranByid,
   postPelajaran,
+  putPelajaran,
   removePelajaran,
 } from '../../../features/pelajaran/pelajaranSlice';
 import useToken from '../../../app/useToken';
@@ -70,22 +71,37 @@ const Pelajaran = () => {
       form = new FormData();
     // console.log(target[2].files[0]);
     form.append('nama', target[0].value);
-    form.append('deskripsi', target[1].value);
-    form.append('image', target[2].files[0]);
+    form.append('kdPelajaran', target[1].value);
+    form.append('deskripsi', target[2].value);
+    form.append('image', target[3].files[0]);
     form.append('uid', token);
-    dispatch(postPelajaran(form));
-    if (!error) {
-      Toast.fire({
-        title: '',
-      });
-      toggle();
+    if (buat) {
+      dispatch(postPelajaran(form));
+      if (!error) {
+        Toast.fire({
+          icon: 'success',
+          title: 'Berhasil menambahkan Pelajaran!',
+        });
+        toggle();
+      }
+    } else {
+      dispatch(putPelajaran(form));
+      if (!error) {
+        Toast.fire({
+          icon: 'success',
+          title: 'Berhasil Mengubah Pelajaran!',
+        });
+        toggle();
+      }
     }
   };
   const toggle = () => {
     setModal(!modal);
-    setFile(null);
-    Array.from(document.querySelectorAll('input')).forEach((input) => (input.value = ''));
-    document.querySelector('textarea').value = '';
+    if (modal) {
+      setFile(null);
+      Array.from(document.querySelectorAll('input')).forEach((input) => (input.value = ''));
+      document.querySelector('textarea').value = '';
+    }
   };
   const onDelete = async (e, data) => {
     e.preventDefault();
@@ -106,11 +122,11 @@ const Pelajaran = () => {
   // ketika tombol update diklik
   const ubah = (data) => {
     setBuat(false);
+    console.log(document.querySelectorAll('input'));
     console.log(data);
     Array.from(document.querySelectorAll('input'))[0].value = data.nama;
-    Array.from(document.querySelectorAll('input'))[1].value = data.tenggat;
+    Array.from(document.querySelectorAll('input'))[1].value = data.kdPelajaran;
     if (data.gambar != null) {
-      Array.from(document.querySelectorAll('input'))[2].value = data.gambar;
       setFile(data.gambar);
     }
     document.querySelector('textarea').value = data.deskripsi;
@@ -197,11 +213,16 @@ const Pelajaran = () => {
                   </CInputGroupPrepend>
                   <CInput type="text" placeholder="Masukkan nama.." required />
                 </CInputGroup>
+                <CInput type="hidden" />
                 <CTextarea rows={4} type="text" placeholder="Masukkan Deskripsi.." required />
                 <CRow className="mt-3">
                   {file != null && (
                     <CCol sm="4">
-                      <CImg src={URL.createObjectURL(file)} thumbnail />
+                      {buat ? (
+                        <CImg src={URL.createObjectURL(file)} thumbnail />
+                      ) : (
+                        <CImg src={BASE_URL + '/pelajaran/' + file} thumbnail />
+                      )}
                     </CCol>
                   )}
                   <CCol>
@@ -213,9 +234,15 @@ const Pelajaran = () => {
                         className="custom-file-input"
                         onChange={(e) => setFile(e.target.files[0])}
                       />
-                      <CLabel className="custom-file-label" htmlFor="file">
-                        {file ? file.name : 'Pilih File'}
-                      </CLabel>
+                      {buat ? (
+                        <CLabel className="custom-file-label" htmlFor="file">
+                          {file ? file.name : 'Pilih File'}
+                        </CLabel>
+                      ) : (
+                        <CLabel className="custom-file-label" htmlFor="file">
+                          {file ? file : 'Pilih File'}
+                        </CLabel>
+                      )}
                     </div>
                   </CCol>
                 </CRow>

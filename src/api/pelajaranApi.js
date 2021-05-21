@@ -30,6 +30,15 @@ export async function createPelajaran(res = null) {
   }
 }
 
+export async function updatePelajaran(res = null) {
+  if (res !== null) {
+    const {data} = await axios.put(BASE_URL + '/pelajaran/update', res);
+    return apiResult(data);
+  } else {
+    throw new Error('required Uid');
+  }
+}
+
 export async function removePelajaranApi(kd = null) {
   if (kd !== null) {
     const {data} = await axios.delete(BASE_URL + '/pelajaran/' + kd);
