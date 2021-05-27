@@ -34,7 +34,7 @@ import {
 import useToken from '../../../app/useToken';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faHome} from '@fortawesome/free-solid-svg-icons';
-import {BASE_URL, Wsocket} from '../../../utils';
+import {URLIMG_PELAJARAN, Wsocket} from '../../../utils';
 import {useHistory} from 'react-router';
 import CIcon from '@coreui/icons-react';
 import Swal from 'sweetalert2';
@@ -136,6 +136,7 @@ const Pelajaran = () => {
     socket.on('connect', () => {
       console.log(socket.id);
     });
+    return () => socket.disconnect();
   }, []);
   useEffect(() => {
     dispatch(getPelajaranByid(token));
@@ -177,11 +178,7 @@ const Pelajaran = () => {
                     </CRow>
                   </div>
                   {e.gambar != null ? (
-                    <CCardImg
-                      height={150}
-                      variant="full"
-                      src={BASE_URL + '/pelajaran/' + e.gambar}
-                    />
+                    <CCardImg height={150} variant="full" src={URLIMG_PELAJARAN + e.gambar} />
                   ) : (
                     <CCardBody color="gradient-warning" className="text-center">
                       <CIcon name="cil-school" height="64" className="my-4" />
@@ -221,7 +218,7 @@ const Pelajaran = () => {
                       {buat ? (
                         <CImg src={URL.createObjectURL(file)} thumbnail />
                       ) : (
-                        <CImg src={BASE_URL + '/pelajaran/' + file} thumbnail />
+                        <CImg src={URLIMG_PELAJARAN + file} thumbnail />
                       )}
                     </CCol>
                   )}

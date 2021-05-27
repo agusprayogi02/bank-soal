@@ -37,7 +37,7 @@ import {faGamepad} from '@fortawesome/free-solid-svg-icons';
 import {useDispatch, useSelector} from 'react-redux';
 import {createKuis, getKuis, getKuisFailure, removeKuis} from '../../../features/kuis';
 import {getApiPelajaranId} from '../../../api/pelajaranApi';
-import {BASE_URL} from '../../../utils';
+import {URLIMG_KUIS} from '../../../utils';
 import CIcon from '@coreui/icons-react';
 import {useHistory} from 'react-router';
 import './pelajaran.css';
@@ -174,7 +174,7 @@ const PelajaranItem = ({match}) => {
                       height={180}
                       variant="full"
                       style={{objectFit: 'cover'}}
-                      src={BASE_URL + '/kuis/' + dt.gambar}
+                      src={URLIMG_KUIS + dt.gambar}
                     />
                   ) : (
                     <CCardBody color="gradient-warning" className="text-center">
@@ -235,7 +235,11 @@ const PelajaranItem = ({match}) => {
               <CRow>
                 {file != null && (
                   <CCol sm="4">
-                    <CImg src={URL.createObjectURL(file)} thumbnail />
+                    {buat ? (
+                      <CImg src={URL.createObjectURL(file)} thumbnail />
+                    ) : (
+                      <CImg src={URLIMG_KUIS + file} thumbnail />
+                    )}
                   </CCol>
                 )}
                 <CCol>
